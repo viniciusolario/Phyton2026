@@ -1,65 +1,86 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="pt-br">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agenda Flask</title>
+    <title>Copa do Mundo 2026</title>
 
+    <!-- Semantic UI -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.css">
     <script src="https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js"></script>
 </head>
 
 <body>
-    <body>
-        <div style="margin-top: 50px;" class="ui container">
+    <div class="ui container" style="margin-top: 50px;">
 
-            <h1 class="ui center aligned header" style="color:#0026fc">Agenda Python</h1> 
-            {% for lista in lista_dados %}
-                <h2 class="ui center aligned header" style="color:#073304">{{lista[0]}}</h2>                        
-            {% endfor %}                  
-            
-            <form class="ui form" action="/add" method="post" id="formAdd">
+        <!-- Título -->
+        <h1 class="ui center aligned header" style="color:#0026fc">Copa do Mundo 2026</h1>
+        <h3 class="ui center aligned header" style="color:#073304">Cadastro de Seleções</h3>
+
+        <!-- Formulário -->
+        <form class="ui form" action="/add" method="post" id="formAdd">
+            <div class="three fields">
                 <div class="field">
-                    <label>Dados pessoais</label>
-                    <input type="text" name="nome"  placeholder="Seu nome..."><br><br>
-                    <input type="text" name="fone"  placeholder="fone..."><br><br>
-                    <input type="text" name="email" placeholder="e-mail..."><br><br>                
-                </div>              
+                    <label>Seleção</label>
+                    <input type="text" name="selecao" placeholder="Ex: Brasil" required>
+                </div>
+                <div class="field">
+                    <label>Continente</label>
+                    <input type="text" name="continente" placeholder="Ex: América do Sul" required>
+                </div>
+                <div class="field">
+                    <label>Nº de Títulos</label>
+                    <input type="number" name="titulos" placeholder="Ex: 5" min="0" required>
+                </div>
+            </div>
+            <button class="ui blue button" type="submit">Adicionar Seleção</button>
+        </form>
+
+        <!-- Botões de Ação -->
+        <div class="ui buttons" style="margin-top: 20px;">
+            <form action="/sort" method="post">
+                <button class="ui yellow button" type="submit">Ordem Alfabética</button>
             </form>
-            <br>
-            <div style="display: flex;">
-                <button class="ui blue button" type="button" id="add">Adicionar</button>
-    
-                <form class="ui form" action="/sort" method="post">
-                    <button class="ui yellow button" type="submit">Ordem alfabética</button>
-                </form>
-    
-                <form class="ui form" action="/reverse" method="post">
-                    <button class="ui orange button" type="submit">Ordem reversa</button>
-                </form>
-                          
-                <form class="ui form" action="/clear" method="post">
-                    <button class="ui red button" type="submit">Apagar agenda</button>
-                </form>
-            </div>
-    
-            <hr>
-    
-            {% for lista in lista_front %}
-            <div class="ui segment">
-                <p class="ui big header">{{lista[0]}}&emsp;&emsp;|&emsp;&emsp;{{lista[1]}}&emsp;&emsp;|&emsp;&emsp;{{lista[2]}}</p>
-                
-                <!-- <a class="ui green button" href="/update/{{ lista[0] }}">Update</a> -->
-                <a class="ui green button" href="/delete/{{ lista[0] }}">Delete</a>            
-            </div>
-            {% endfor %}
+            <form action="/reverse" method="post">
+                <button class="ui orange button" type="submit">Ordem Reversa</button>
+            </form>
+            <form action="/clear" method="post">
+                <button class="ui red button" type="submit">Apagar Lista</button>
+            </form>
         </div>
-    
-        <script>
-            const add = document.getElementById('add')
-            const form = document.getElementById('formAdd')
-            add.addEventListener('click', ()=> form.submit())
-        </script>
-    </body>
+
+        <hr>
+
+        <!-- Lista de Seleções -->
+        {% if lista_front %}
+        <table class="ui celled table">
+            <thead>
+                <tr>
+                    <th>Seleção</th>
+                    <th>Continente</th>
+                    <th>Títulos</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for lista in lista_front %}
+                <tr>
+                    <td>{{ lista[0] }}</td>
+                    <td>{{ lista[1] }}</td>
+                    <td>{{ lista[2] }}</td>
+                    <td>
+                        <a class="ui green button" href="/delete/{{ lista[0] }}">Remover</a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="ui message">
+            <p>Nenhuma seleção cadastrada ainda. Adicione uma acima!</p>
+        </div>
+        {% endif %}
+    </div>
+</body>
 </html>
